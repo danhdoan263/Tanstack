@@ -1,16 +1,26 @@
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import './App.css'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { useProducts } from './hooks/useQuery'
 
-const queryClient = new QueryClient()
 
 function App() {
+  const {getAll} = useProducts({})
+  const {data, isLoading, isError} = getAll
+  console.log('data',data);
+  console.log('isLoading',isLoading);
+  console.log('isError',isError);
+  
   return (
     <>
-    <QueryClientProvider client={queryClient}>
       <h1>Hello World</h1>
-      <TanStackRouterDevtools initialIsOpen={false}/>
-    </QueryClientProvider>
+      {data?.products.map((product)=>(
+        <div key={product.id}>
+          <h2>{product.title}</h2>
+          <p>{product.description}</p>
+        </div>
+      ))}
+      
+      <ReactQueryDevtools initialIsOpen={false} />
     </>
   )
 }
